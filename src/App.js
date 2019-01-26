@@ -1,28 +1,42 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+    constructor(props) {
+        super(props)
+        this.state = {
+            data: []
+        }
 
-export default App;
+    }
+    _downloadTxtFile = () => {
+      var file = new Blob([document.getElementById('data').value], {type: 'text/plain'});
+        fetch("http://localhost:5000/schedule", {
+             method: 'POST',
+             body: file
+        }).then((response) => response.text())
+        .then(json => {
+            var myObject = JSON.parse(json);
+            this.setState({
+                data: myObject
+            })
+        })
+    }
+
+    render() {
+      return (
+        <div>
+        <div>
+          <textarea id="data" />
+          <button onClick={this._downloadTxtFile}>Parse</button>
+        </div>
+        <div>
+        <ul>
+            {this.state.data.map(item=> <li key={item.index.toString()}>{item.mata_kuliah}</li>)}
+        </ul>
+        </div>
+        </div>
+      );
+    }
+  }
+
+export default App
