@@ -55,6 +55,7 @@ class App extends Component {
                 <Container>
                     <div>
                     <Typography component="h1" variant="h3" gutterBottom>
+                    
         Schedule Scraper
       </Typography>
                         <Typography variant="subtitle1" gutterBottom>Web app ini mengubah <strong>Halaman Jadwal Kuliah SIATMA</strong> menjadi <code>idk yet.</code> menggunakan API.</Typography>
@@ -66,13 +67,18 @@ class App extends Component {
           label="Masukkan hasil copy disini"
           multiline
           fullWidth
+          disabled
           rowsMax="10"
           value={this.state.multiline}
           onChange={this.handleChange('multiline')}
           margin="none"
         />          
-        <p>&nbsp;</p><Typography variant="body1" gutterBottom>Setelah selesai mengutip, tekan tombol dibawah dan tunggu hingga API selesai memproses.    </Typography>
-        <p>&nbsp;</p> <Button variant="contained" color="primary"  size="large" onClick={this._downloadTxtFile}>Parse</Button>
+        <p>&nbsp;</p>
+        <Typography component="h2" variant="h2" >API sedang dalam tahap pengembangan</Typography>
+        <Typography variant="h5">Temporary disabled</Typography>
+        <p>&nbsp;   </p>
+        <Typography variant="body1" gutterBottom>Setelah selesai mengutip, tekan tombol dibawah dan tunggu hingga API selesai memproses.    </Typography>
+        <p>&nbsp;</p> <Button disabled variant="contained" color="primary"  size="large" onClick={this._downloadTxtFile}>Parse</Button>
         </div>
         <p>&nbsp;</p>
         <Typography variant="body1">{this.state.status}</Typography>
