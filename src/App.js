@@ -10,7 +10,7 @@ class App extends Component {
     }
     _downloadTxtFile = () => {
       var file = new Blob([document.getElementById('data').value], {type: 'text/plain'});
-        fetch("http://localhost:5000/schedule", {
+        fetch("https://schedule-scrape-api.herokuapp.com/schedule", {
              method: 'POST',
              body: file
         }).then((response) => response.text())
