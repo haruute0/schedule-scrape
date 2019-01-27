@@ -6,6 +6,9 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({ dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539" });
 
 const capitalize = (s) => {
   if (typeof s !== 'string') return ''
@@ -56,6 +59,7 @@ class App extends Component {
             status: "OK"
           });
           this.setState({ loading: false, multiline: "", condition: true });
+          Sentry.captureMessage('200: Parsing successfully');
         } catch (err) {
           this.setState({
             status: (
@@ -66,7 +70,7 @@ class App extends Component {
             inputError: true
           });
           document.getElementById("data").focus();
-          console.log(err);
+          Sentry.captureException(err)
         }
       })
     );
