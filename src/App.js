@@ -7,6 +7,10 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
 
+const capitalize = (s) => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -21,14 +25,14 @@ class App extends Component {
 
   _checkValueMultiline = () => {
     if (this.state.multiline === "") {
-      this.setState({ status: "Silahkan inputkan data terlebih dahulu" });
+      this.setState({ status: "Silahkan inputkan data terlebih dahulu", condition: false });
     } else {
       this._downloadTxtFile();
     }
   };
 
   _downloadTxtFile = () => {
-    this.setState({ loading: true, status: "", data: [] });
+    this.setState({ loading: true, status: "", data: [], condition: false});
     var file = new Blob([document.getElementById("data").value], {
       type: "text/plain"
     });
@@ -47,13 +51,9 @@ class App extends Component {
         } catch (err) {
           this.setState({
             status: (
-              <Typography variant="body1">
-                INTERNAL SERVER ERROR
-                <br />
-                Mohon periksa lagi data yang anda input.
-                <br />
-                <br />
-              </Typography>
+              <>
+                (INTERNAL SERVER ERROR) Mohon periksa lagi data yang anda input.
+              </>
             )
           });
           this.setState({ loading: false });
@@ -73,6 +73,7 @@ class App extends Component {
     const Jadwal = (
       <>
         <Typography variant="h6">Weekly Schedule</Typography>
+        <Typography variant="subheading"><strong>Jadwal Mingguan Mahasiswa diolah dari SIATMA</strong></Typography>
         <table>
           <thead>
             <tr>
@@ -88,7 +89,7 @@ class App extends Component {
             {Object.keys(this.state.data).map((e, i) => {
               return (
                 <>
-                  <tr colspan="6">{e}</tr>
+                  <tr colspan="6">{capitalize(e)}</tr>
                   {this.state.data[e].map((v, k) => {
                     return (
                       <tr key={k}>
@@ -106,6 +107,7 @@ class App extends Component {
             })}
           </tbody>
         </table>
+        <Typography variant="overline">Generated on {Date()} by <strong>jadwal.vriyas.com</strong></Typography>
       </>
     );
 
@@ -179,7 +181,7 @@ class App extends Component {
               </Button>
             </div>
             <p>&nbsp;</p>
-            {this.state.status}
+            {this.state.status && <Typography variant="body1">API Status: <strong>{this.state.status}</strong></Typography>}
             <div>{show}</div>
             <div>
               {" "}
