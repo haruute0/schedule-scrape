@@ -12,6 +12,10 @@ const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 class App extends Component {
+  componentDidMount(){
+    document.getElementById("data").focus(); 
+ }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,20 +23,24 @@ class App extends Component {
       loading: false,
       status: "",
       multiline: "",
-      condition: false
+      condition: false,
+      inputError: false
     };
   }
 
   _checkValueMultiline = () => {
     if (this.state.multiline === "") {
-      this.setState({ status: "Silahkan inputkan data terlebih dahulu", condition: false });
+      this.setState({ status: "Silahkan inputkan data terlebih dahulu", condition: false,
+      inputError: true });
+      document.getElementById("data").focus();
     } else {
       this._downloadTxtFile();
     }
   };
 
   _downloadTxtFile = () => {
-    this.setState({ loading: true, status: "", data: [], condition: false});
+    this.setState({ loading: true, status: "", data: [], condition: false,
+    inputError: false});
     var file = new Blob([document.getElementById("data").value], {
       type: "text/plain"
     });
@@ -54,9 +62,10 @@ class App extends Component {
               <>
                 (INTERNAL SERVER ERROR) Mohon periksa lagi data yang anda input.
               </>
-            )
+            ), loading: false,
+            inputError: true
           });
-          this.setState({ loading: false });
+          document.getElementById("data").focus();
           console.log(err);
         }
       })
@@ -159,11 +168,14 @@ class App extends Component {
                 id="data"
                 label="Masukkan hasil copy disini"
                 multiline
+                error={this.state.inputError}
                 fullWidth
+                defaultValue=""
                 rowsMax="10"
                 value={this.state.multiline}
                 onChange={this.handleChange("multiline")}
                 margin="none"
+                autoFocus
               />
               <p>&nbsp;</p>
               <Typography variant="body1" gutterBottom>
@@ -182,7 +194,7 @@ class App extends Component {
             </div>
             <p>&nbsp;</p>
             {this.state.status && <Typography variant="body1">API Status: <strong>{this.state.status}</strong></Typography>}
-            <div>{show}</div>
+            <div>{show}</div> 
             <div>
               {" "}
               Made with <span>❤</span> by <strong>Vriyas Hartama</strong>.<br />
