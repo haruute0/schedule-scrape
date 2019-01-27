@@ -6,18 +6,21 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
-import * as Sentry from '@sentry/browser';
+import * as Sentry from "@sentry/browser";
+import uuidv1 from "uuid/v1";
 
-Sentry.init({ dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539" });
+Sentry.init({
+  dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539"
+});
 
-const capitalize = (s) => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
+const capitalize = s => {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 class App extends Component {
-  componentDidMount(){
-    document.getElementById("data").focus(); 
- }
+  componentDidMount() {
+    document.getElementById("data").focus();
+  }
 
   constructor(props) {
     super(props);
@@ -29,12 +32,18 @@ class App extends Component {
       condition: false,
       inputError: false
     };
+    this.props = {
+      sessionID: uuidv1()
+    };
   }
 
   _checkValueMultiline = () => {
     if (this.state.multiline === "") {
-      this.setState({ status: "Silahkan inputkan data terlebih dahulu", condition: false,
-      inputError: true });
+      this.setState({
+        status: "Silahkan inputkan data terlebih dahulu",
+        condition: false,
+        inputError: true
+      });
       document.getElementById("data").focus();
     } else {
       this._downloadTxtFile();
@@ -42,8 +51,13 @@ class App extends Component {
   };
 
   _downloadTxtFile = () => {
-    this.setState({ loading: true, status: "", data: [], condition: false,
-    inputError: false});
+    this.setState({
+      loading: true,
+      status: "",
+      data: [],
+      condition: false,
+      inputError: false
+    });
     var file = new Blob([document.getElementById("data").value], {
       type: "text/plain"
     });
@@ -59,18 +73,25 @@ class App extends Component {
             status: "OK"
           });
           this.setState({ loading: false, multiline: "", condition: true });
-          Sentry.captureMessage('200: Parsing successfully');
+          Sentry.configureScope(scope => {
+            scope.setUser({ SessionID: this.props.sessionID });
+          });
+          Sentry.captureMessage("200: Parsing successfully");
         } catch (err) {
           this.setState({
             status: (
               <>
                 (INTERNAL SERVER ERROR) Mohon periksa lagi data yang anda input.
               </>
-            ), loading: false,
+            ),
+            loading: false,
             inputError: true
           });
           document.getElementById("data").focus();
-          Sentry.captureException(err)
+          Sentry.configureScope(scope => {
+            scope.setUser({ SessionID: this.props.sessionID });
+          });
+          Sentry.captureException(err);
         }
       })
     );
@@ -86,7 +107,9 @@ class App extends Component {
     const Jadwal = (
       <>
         <Typography variant="h6">Weekly Schedule</Typography>
-        <Typography variant="subheading"><strong>Jadwal Mingguan Mahasiswa diolah dari SIATMA</strong></Typography>
+        <Typography variant="subheading">
+          <strong>Jadwal Mingguan Mahasiswa diolah dari SIATMA</strong>
+        </Typography>
         <table>
           <thead>
             <tr>
@@ -120,7 +143,9 @@ class App extends Component {
             })}
           </tbody>
         </table>
-        <Typography variant="overline">Generated on {Date()} by <strong>jadwal.vriyas.com</strong></Typography>
+        <Typography variant="overline">
+          Generated on {Date()} by <strong>jadwal.vriyas.com</strong>
+        </Typography>
       </>
     );
 
@@ -197,8 +222,12 @@ class App extends Component {
               </Button>
             </div>
             <p>&nbsp;</p>
-            {this.state.status && <Typography variant="body1">API Status: <strong>{this.state.status}</strong></Typography>}
-            <div>{show}</div> 
+            {this.state.status && (
+              <Typography variant="body1">
+                API Status: <strong>{this.state.status}</strong>
+              </Typography>
+            )}
+            <div>{show}</div>
             <div>
               {" "}
               Made with <span>❤</span> by <strong>Vriyas Hartama</strong>.<br />
