@@ -33,7 +33,7 @@ class App extends Component {
           data: Obj,
           status: "OK"
         });
-        this.setState({loading: false})
+        this.setState({loading: false, multiline:""})
 
     } catch(err) {
         this.setState({
