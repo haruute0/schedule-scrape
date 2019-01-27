@@ -76,7 +76,7 @@ class App extends Component {
                         <td>&nbsp;{v.sesi}</td>
                         <td>{v.mata_kuliah}</td>
                         <td>{v.kode}&nbsp;</td>
-                        <td>{v.dosen}</td>
+                        <td>{v.dosen_pengampu}</td>
                         <td>{v.kelas}&nbsp;</td>
                         <td>{v.ruangan}</td>
                       </tr>
