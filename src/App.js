@@ -46,7 +46,7 @@ class App extends Component {
 
     } catch(err) {
         this.setState({
-            status: <Typography variant="body1">INTERNAL SERVER ERROR<br />Mohon periksa lagi data yang anda input.</Typography>
+            status: <Typography variant="body1">INTERNAL SERVER ERROR<br />Mohon periksa lagi data yang anda input.<br /><br /></Typography>
         })
         this.setState({loading: false})
         console.log(err)
@@ -176,6 +176,10 @@ class App extends Component {
             {show}
 
             </div>
+            <div> Made with <span>❤</span> by {" "}
+                    <strong>Vriyas Hartama</strong>.<br />&copy; 2019 <a href="https://vriyas.com" target="_blank"
+                        rel="noopener noreferrer"><strong>vriyas.com</strong></a> - <a href="https://github.com/haruute0" target="_blank"
+                        rel="noopener noreferrer"><strong>GitHub</strong></a></div>
           </Container>
         </Section>
       </div>
