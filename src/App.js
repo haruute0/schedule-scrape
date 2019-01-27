@@ -5,7 +5,7 @@ import { Section, Container } from "react-bulma-components/full";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import Loader from 'react-loader-spinner'
+import Loader from "react-loader-spinner";
 
 class App extends Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class App extends Component {
       data: [],
       loading: false,
       status: "",
-      multiline: ""
+      multiline: "",
+      condition: false
     };
   }
 
@@ -22,12 +23,12 @@ class App extends Component {
     if (this.state.multiline === "") {
       this.setState({ status: "Silahkan inputkan data terlebih dahulu" });
     } else {
-      this._downloadTxtFile()
+      this._downloadTxtFile();
     }
-  }
+  };
 
   _downloadTxtFile = () => {
-    this.setState({loading: true, status: "", data:[]})
+    this.setState({ loading: true, status: "", data: [] });
     var file = new Blob([document.getElementById("data").value], {
       type: "text/plain"
     });
@@ -36,22 +37,28 @@ class App extends Component {
       body: file
     }).then(response =>
       response.text().then(json => {
-          try {
-        let Obj = JSON.parse(json);
-        this.setState({
-          data: Obj,
-          status: "OK"
-        });
-        this.setState({loading: false, multiline:""})
-
-    } catch(err) {
-        this.setState({
-            status: <Typography variant="body1">INTERNAL SERVER ERROR<br />Mohon periksa lagi data yang anda input.<br /><br /></Typography>
-        })
-        this.setState({loading: false})
-        console.log(err)
-
-    }
+        try {
+          let Obj = JSON.parse(json);
+          this.setState({
+            data: Obj,
+            status: "OK"
+          });
+          this.setState({ loading: false, multiline: "", condition: true });
+        } catch (err) {
+          this.setState({
+            status: (
+              <Typography variant="body1">
+                INTERNAL SERVER ERROR
+                <br />
+                Mohon periksa lagi data yang anda input.
+                <br />
+                <br />
+              </Typography>
+            )
+          });
+          this.setState({ loading: false });
+          console.log(err);
+        }
       })
     );
   };
@@ -63,22 +70,25 @@ class App extends Component {
   };
 
   render() {
-    const Jadwal = Object.keys(this.state.data).map((e, i) => {
-      return (
-        <ul key={i}>
-          <li>
-            <Typography variant="h6">{e}</Typography>
-            <div>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>&nbsp;Sesi</td>
-                    <td>Mata Kuliah&nbsp;</td>
-                    <td>Kode</td>
-                    <td>Dosen</td>
-                    <td>Kelas</td>
-                    <td>Ruangan</td>
-                  </tr>
+    const Jadwal = (
+      <>
+        <Typography variant="h6">Weekly Schedule</Typography>
+        <table>
+          <thead>
+            <tr>
+              <td>Sesi</td>
+              <td>Mata Kuliah</td>
+              <td>Kode</td>
+              <td>Dosen</td>
+              <td>Kelas</td>
+              <td>Ruangan</td>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(this.state.data).map((e, i) => {
+              return (
+                <>
+                  <tr colspan="6">{e}</tr>
                   {this.state.data[e].map((v, k) => {
                     return (
                       <tr key={k}>
@@ -91,25 +101,24 @@ class App extends Component {
                       </tr>
                     );
                   })}
-                </tbody>
-              </table>
-            </div>
-          </li>
-        </ul>
-      );
-    });
+                </>
+              );
+            })}
+          </tbody>
+        </table>
+      </>
+    );
 
-    let show
+    let show;
 
     if (this.state.loading) {
-        show =       <Loader 
-        type="Oval"
-        color="#000"
-        height="32"	
-        width="32"
-     />  
+      show = <Loader type="Oval" color="#000" height="32" width="32" />;
     } else {
-        show = Jadwal
+      if (this.state.condition) {
+        show = Jadwal;
+      } else {
+        show = "";
+      }
     }
 
     return (
@@ -171,15 +180,27 @@ class App extends Component {
             </div>
             <p>&nbsp;</p>
             {this.state.status}
+            <div>{show}</div>
             <div>
-
-            {show}
-
+              {" "}
+              Made with <span>❤</span> by <strong>Vriyas Hartama</strong>.<br />
+              &copy; 2019{" "}
+              <a
+                href="https://vriyas.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <strong>vriyas.com</strong>
+              </a>{" "}
+              -{" "}
+              <a
+                href="https://github.com/haruute0"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <strong>GitHub</strong>
+              </a>
             </div>
-            <div> Made with <span>❤</span> by {" "}
-                    <strong>Vriyas Hartama</strong>.<br />&copy; 2019 <a href="https://vriyas.com" target="_blank"
-                        rel="noopener noreferrer"><strong>vriyas.com</strong></a> - <a href="https://github.com/haruute0" target="_blank"
-                        rel="noopener noreferrer"><strong>GitHub</strong></a></div>
           </Container>
         </Section>
       </div>
