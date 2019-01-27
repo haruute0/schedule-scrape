@@ -13,8 +13,17 @@ class App extends Component {
     this.state = {
       data: [],
       loading: false,
-      status: ""
+      status: "",
+      multiline: ""
     };
+  }
+
+  _checkValueMultiline = () => {
+    if (this.state.multiline === "") {
+      this.setState({ status: "Silahkan inputkan data terlebih dahulu" });
+    } else {
+      this._downloadTxtFile()
+    }
   }
 
   _downloadTxtFile = () => {
@@ -155,7 +164,7 @@ class App extends Component {
                 variant="contained"
                 color="primary"
                 size="large"
-                onClick={this._downloadTxtFile}
+                onClick={this._checkValueMultiline}
               >
                 Parse
               </Button>
