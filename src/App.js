@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
 import * as Sentry from "@sentry/browser";
-import uuidv1 from "uuid/v1";
 
 Sentry.init({
   dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539"
@@ -73,9 +72,6 @@ class App extends Component {
             status: "OK"
           });
           this.setState({ loading: false, multiline: "", condition: true });
-          Sentry.configureScope(scope => {
-            scope.setUser({ SessionID: this.props.sessionID });
-          });
           Sentry.captureMessage("200: Parsing successfully");
         } catch (err) {
           this.setState({
@@ -88,9 +84,6 @@ class App extends Component {
             inputError: true
           });
           document.getElementById("data").focus();
-          Sentry.configureScope(scope => {
-            scope.setUser({ SessionID: this.props.sessionID });
-          });
           Sentry.captureException(err);
         }
       })
