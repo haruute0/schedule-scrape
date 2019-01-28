@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
 import * as Sentry from "@sentry/browser";
 import { Label, Table } from 'semantic-ui-react'
+import './App.css'
 
 Sentry.init({
   dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539"
@@ -138,7 +139,7 @@ class App extends Component {
           </Table.Body>
         </Table>
         <Typography variant="overline">
-          Generated on {Date()} by <strong>jadwal.vriyas.com</strong>
+          Generated on {Date()} <br />by <strong>jadwal.vriyas.com</strong>
         </Typography>
       </>
     );
@@ -149,14 +150,14 @@ class App extends Component {
       show = <Loader type="Oval" color="#000" height="32" width="32" />;
     } else {
       if (this.state.condition) {
-        show = Jadwal;
+        show = <><div className="Jadwal_Print">{Jadwal}</div><div className="no-print red">Ingin Print Jadwal Kamu? Langsung saja CTRL+P lalu print / save as PDF.</div></>;
       } else {
         show = "";
       }
     }
 
     return (
-      <div>
+      <div >
         <Helmet>
           <meta charSet="utf-8" />
           <title>Schedule Scrapper</title>
@@ -169,7 +170,7 @@ class App extends Component {
         </Helmet>
         <Section>
           <Container>
-            <div>
+            <div className="no-print">
               <Typography component="h1" variant="h3" gutterBottom>
                 Schedule Scraper
               </Typography>
@@ -213,15 +214,15 @@ class App extends Component {
               >
                 Parse
               </Button>
-            </div>
-            <p>&nbsp;</p>
+              <p>&nbsp;</p>
             {this.state.status && (
               <Typography variant="body1">
                 API Status: <strong>{this.state.status}</strong>
               </Typography>
             )}
-            <div>{show}</div>
-            <div>
+            </div>
+            {show}
+            <div className="no-print">
               {" "}
               Made with <span>❤</span> by <strong>Vriyas Hartama</strong>.<br />
               &copy; 2019{" "}
