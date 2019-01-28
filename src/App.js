@@ -186,6 +186,10 @@ class App extends Component {
                 </code>{" "}
                 dan kutip pada textarea dibawah.
               </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+      Untuk Save/Print jadwal, setelah jadwal terolah kalian bisa CTRL+P untuk print/save to pdf melalui browser kalian.
+              </Typography>
+        
               <p>&nbsp;</p>
               <TextField
                 variant="outlined"
