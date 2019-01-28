@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
-import "react-bulma-components/dist/react-bulma-components.min.css";
 import { Section, Container } from "react-bulma-components/full";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Loader from "react-loader-spinner";
 import * as Sentry from "@sentry/browser";
+import { Label, Table } from 'semantic-ui-react'
 
 Sentry.init({
   dsn: "https://f7dff0f8273e4436892cc10c0acda945@sentry.io/1380539"
@@ -30,9 +30,6 @@ class App extends Component {
       multiline: "",
       condition: false,
       inputError: false
-    };
-    this.props = {
-      sessionID: uuidv1()
     };
   }
 
@@ -103,39 +100,43 @@ class App extends Component {
         <Typography variant="subheading">
           <strong>Jadwal Mingguan Mahasiswa diolah dari SIATMA</strong>
         </Typography>
-        <table>
-          <thead>
-            <tr>
-              <td>Sesi</td>
-              <td>Mata Kuliah</td>
-              <td>Kode</td>
-              <td>Dosen</td>
-              <td>Kelas</td>
-              <td>Ruangan</td>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.Cell><center>Sesi</center></Table.Cell>
+              <Table.Cell><center>Mata Kuliah</center></Table.Cell>
+              <Table.Cell><center>Kode</center></Table.Cell>
+              <Table.Cell><center>Dosen</center></Table.Cell>
+              <Table.Cell><center>Kelas</center></Table.Cell>
+              <Table.Cell><center>Ruangan</center></Table.Cell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {Object.keys(this.state.data).map((e, i) => {
               return (
                 <>
-                  <tr colspan="6">{capitalize(e)}</tr>
+                  <Table.Row>
+                  <Table.Cell colSpan='6'>
+                  <Label color='red' ribbon key={i}>{capitalize(e)}</Label>
+                  </Table.Cell>
+                  </Table.Row>
                   {this.state.data[e].map((v, k) => {
                     return (
-                      <tr key={k}>
-                        <td>&nbsp;{v.sesi}</td>
-                        <td>{v.mata_kuliah}</td>
-                        <td>{v.kode}&nbsp;</td>
-                        <td>{v.dosen_pengampu}</td>
-                        <td>{v.kelas}&nbsp;</td>
-                        <td>{v.ruangan}</td>
-                      </tr>
+                      <Table.Row key={k}>
+                        <Table.Cell>&nbsp;{v.sesi}</Table.Cell>
+                        <Table.Cell>{v.mata_kuliah}</Table.Cell>
+                        <Table.Cell>{v.kode}&nbsp;</Table.Cell>
+                        <Table.Cell>{v.dosen_pengampu}</Table.Cell>
+                        <Table.Cell>{v.kelas}&nbsp;</Table.Cell>
+                        <Table.Cell>{v.ruangan}</Table.Cell>
+                      </Table.Row>
                     );
                   })}
                 </>
               );
             })}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
         <Typography variant="overline">
           Generated on {Date()} by <strong>jadwal.vriyas.com</strong>
         </Typography>
@@ -192,7 +193,6 @@ class App extends Component {
                 multiline
                 error={this.state.inputError}
                 fullWidth
-                defaultValue=""
                 rowsMax="10"
                 value={this.state.multiline}
                 onChange={this.handleChange("multiline")}
